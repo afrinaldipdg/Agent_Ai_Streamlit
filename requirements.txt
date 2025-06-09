@@ -1,20 +1,25 @@
-streamlit
-openai
-langchain
-wikipedia
-python-dotenv
-requests
-streamlit==1.45.1
+# === Streamlit UI ===
+streamlit==1.45.1        # UI utama untuk aplikasi Agentic AI
+
+# === LangChain Core ===
 langchain==0.3.25
-langchain-community==0.3.24
 langchain-core==0.3.64
+langchain-community==0.3.24
 langchain-experimental==0.3.4
-langchain-google-genai==2.0.10
 langchain-text-splitters==0.3.8
-python-dotenv==1.1.0
-tavily-python==0.7.5
-openai==1.84.0
-pydantic==2.11.5 # Penting karena kesalahan validasi yang Anda alami
-pydantic-core==2.33.2 # Ikut pydantic
-requests==2.32.3 # Digunakan di ddg_tor_tool.py
-duckduckgo-search==8.0.2 # Jika tools/search_tool.py masih digunakan atau ada dependensi implisit
+langchain-google-genai==2.0.10  # Hanya perlu jika nanti pakai Google PaLM/VertexAI
+
+# === Model & API ===
+openai==1.84.0            # Untuk koneksi ke OpenAI ChatGPT/GPT-4
+tavily-python==0.7.5      # Jika nanti mau pakai tool pencarian dari Tavily
+
+# === NLP & Informasi ===
+wikipedia                 # Untuk tool pencarian Wikipedia
+
+# === Utilitas & HTTP ===
+python-dotenv==1.1.0      # Untuk load variabel dari .env (opsional)
+requests==2.32.3          # Digunakan untuk akses API cuaca
+
+# === Validasi Data ===
+pydantic==2.11.5          # Diperlukan LangChain v0.3+
+pydantic-core==2.33.2     # Core engine dari pydantic
