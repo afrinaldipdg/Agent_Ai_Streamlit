@@ -7,7 +7,7 @@ langchain-core==0.3.64
 langchain-community==0.3.24
 langchain-experimental==0.3.4
 langchain-text-splitters==0.3.8
-langchain-google-genai==2.0.10  # Hanya perlu jika nanti pakai Google PaLM/VertexAI
+langchain-openai==0.1.8
 
 # === Model & API ===
 openai==1.84.0            # Untuk koneksi ke OpenAI ChatGPT/GPT-4
