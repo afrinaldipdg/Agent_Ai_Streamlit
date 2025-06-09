@@ -1,62 +1,67 @@
 # agent_ai.py
 
-from langchain_community.chat_models import ChatOpenAI
-from langchain.agents import initialize_agent, AgentType
-from langchain_core.tools import Tool
+from langchain_community.chat_models import ChatOpenAI  # Tidak deprecated
+from langchain_core.tools import Tool                   # Bukan dari agent_toolkits!
+from langchain.agents import AgentExecutor, create_react_agent
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 import streamlit as st
 
 from wiki_tool import wiki_tool
 from weather_tool import weather_tool
 
 # ===============================================
-# Inisialisasi LLM & Agent Tools
+# Inisialisasi Model & Tools
 # ===============================================
 
-def buat_agent_executor() -> object:
+def buat_agent_executor() -> AgentExecutor:
     """
-    Menginisialisasi agent LangChain dengan LLM dan daftar tools.
+    Membuat agent executor menggunakan ReAct (LangChain core terbaru).
     Returns:
-        agent_executor (AgentExecutor): Agent yang siap menjalankan perintah.
+        AgentExecutor: Objek agent yang siap menerima prompt.
     """
+
     openai_api_key = st.secrets["api_keys"]["openai"]
 
-    # Inisialisasi model ChatOpenAI
     llm = ChatOpenAI(
-        temperature=0.2,
         model="gpt-3.5-turbo",
-        openai_api_key=openai_api_key
+        temperature=0.2,
+        api_key=openai_api_key,
     )
 
-    # Daftar tools eksternal yang bisa digunakan oleh agent
     tools: list[Tool] = [wiki_tool, weather_tool]
 
-    # Agent zero-shot dengan reAct
-    agent_executor = initialize_agent(
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", "Kamu adalah asisten AI yang cerdas dan membantu."),
+        MessagesPlaceholder(variable_name="chat_history"),
+        ("human", "{input}"),
+        MessagesPlaceholder(variable_name="agent_scratchpad"),
+    ])
+
+    agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
+
+    agent_executor = AgentExecutor(
+        agent=agent,
         tools=tools,
-        llm=llm,
-        agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
         verbose=True
     )
+
     return agent_executor
 
 # ===============================================
-# Fungsi Eksekusi Prompt
+# Fungsi Utama
 # ===============================================
 
 def jalankan_agent(prompt: str) -> str:
     """
-    Menjalankan prompt pengguna ke agent dan mengembalikan hasil jawaban.
-    
+    Menjalankan prompt pengguna menggunakan AgentExecutor.
     Args:
-        prompt (str): Input atau pertanyaan dari pengguna.
-
+        prompt (str): Input atau pertanyaan dari user.
     Returns:
-        str: Jawaban dari agent atau pesan error jika terjadi kesalahan.
+        str: Jawaban dari AI atau error message.
     """
     try:
         agent = buat_agent_executor()
-        hasil = agent.run(prompt)
-        return hasil
-
+        hasil = agent.invoke({"input": prompt})
+        return hasil["output"]
     except Exception as e:
         return f"❌ Terjadi kesalahan saat menjalankan agent:\n{str(e)}"
