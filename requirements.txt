@@ -1,0 +1,6 @@
+streamlit
+openai
+langchain
+wikipedia
+python-dotenv
+requests
