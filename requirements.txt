@@ -4,3 +4,17 @@ langchain
 wikipedia
 python-dotenv
 requests
+streamlit==1.45.1
+langchain==0.3.25
+langchain-community==0.3.24
+langchain-core==0.3.64
+langchain-experimental==0.3.4
+langchain-google-genai==2.0.10
+langchain-text-splitters==0.3.8
+python-dotenv==1.1.0
+tavily-python==0.7.5
+openai==1.84.0
+pydantic==2.11.5 # Penting karena kesalahan validasi yang Anda alami
+pydantic-core==2.33.2 # Ikut pydantic
+requests==2.32.3 # Digunakan di ddg_tor_tool.py
+duckduckgo-search==8.0.2 # Jika tools/search_tool.py masih digunakan atau ada dependensi implisit
