@@ -1,8 +1,7 @@
 # agent_ai.py
 
 from langchain_openai import ChatOpenAI
-from langchain_community.chat_models import ChatOpenAI  # Tidak deprecated
-from langchain_core.tools import Tool                   # Bukan dari agent_toolkits!
+from langchain_core.tools import Tool
 from langchain.agents import AgentExecutor, create_react_agent
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 import streamlit as st
@@ -31,8 +30,9 @@ def buat_agent_executor() -> AgentExecutor:
 
     tools: list[Tool] = [wiki_tool, weather_tool]
 
+    # Menambahkan {tools} dan {tool_names} ke dalam prompt sistem
     prompt = ChatPromptTemplate.from_messages([
-        ("system", "Kamu adalah asisten AI yang cerdas dan membantu."),
+        ("system", "Kamu adalah asisten AI yang cerdas dan membantu. Kamu memiliki akses ke alat-alat berikut: {tools}. Gunakan alat-alat ini sebagai berikut: {tool_names}"),
         MessagesPlaceholder(variable_name="chat_history"),
         ("human", "{input}"),
         MessagesPlaceholder(variable_name="agent_scratchpad"),
