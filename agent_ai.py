@@ -4,6 +4,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.tools import Tool
 from langchain.agents import AgentExecutor, create_react_agent
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.messages import BaseMessage # Import BaseMessage for type hinting
 import streamlit as st
 
 from wiki_tool import wiki_tool
@@ -52,17 +53,21 @@ def buat_agent_executor() -> AgentExecutor:
 # Fungsi Utama
 # ===============================================
 
-def jalankan_agent(prompt: str) -> str:
+def jalankan_agent(prompt: str, chat_history: list[BaseMessage] = None) -> str:
     """
     Menjalankan prompt pengguna menggunakan AgentExecutor.
     Args:
         prompt (str): Input atau pertanyaan dari user.
+        chat_history (list[BaseMessage]): Histori percakapan sebelumnya dalam format LangChain messages.
     Returns:
         str: Jawaban dari AI atau error message.
     """
+    if chat_history is None:
+        chat_history = []
     try:
         agent = buat_agent_executor()
-        hasil = agent.invoke({"input": prompt})
+        # Pass both the current prompt and the chat history
+        hasil = agent.invoke({"input": prompt, "chat_history": chat_history})
         return hasil["output"]
     except Exception as e:
         return f"❌ Terjadi kesalahan saat menjalankan agent:\n{str(e)}"
