@@ -2,7 +2,7 @@ import requests
 from langchain.tools import Tool
 
 # Fungsi pencarian cuaca
-API_KEY = "your_openweathermap_api_key"  # Ganti saat deploy dari secrets.toml
+API_KEY = "openweathermapapi"  # Ganti saat deploy dari secrets.toml
 BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
 
 def cuaca_di_kota(kota: str) -> str:
