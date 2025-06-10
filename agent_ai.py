@@ -32,11 +32,12 @@ def buat_agent_executor() -> AgentExecutor:
     tools: list[Tool] = [wiki_tool, weather_tool]
 
     # Menambahkan {tools} dan {tool_names} ke dalam prompt sistem
+    # Mengubah agent_scratchpad dari MessagesPlaceholder menjadi string di HumanMessage
     prompt = ChatPromptTemplate.from_messages([
         ("system", "Kamu adalah asisten AI yang cerdas dan membantu. Kamu memiliki akses ke alat-alat berikut: {tools}. Gunakan alat-alat ini sebagai berikut: {tool_names}"),
         MessagesPlaceholder(variable_name="chat_history"),
         ("human", "{input}"),
-        MessagesPlaceholder(variable_name="agent_scratchpad"),
+        ("human", "Thought: {agent_scratchpad}"), # Changed: Now expects agent_scratchpad as a string
     ])
 
     agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
