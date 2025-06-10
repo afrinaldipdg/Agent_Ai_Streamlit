@@ -1,5 +1,6 @@
 # agent_ai.py
 
+from langchain_openai import ChatOpenAI
 from langchain_community.chat_models import ChatOpenAI  # Tidak deprecated
 from langchain_core.tools import Tool                   # Bukan dari agent_toolkits!
 from langchain.agents import AgentExecutor, create_react_agent
